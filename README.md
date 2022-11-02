@@ -29,6 +29,10 @@
 - Tech 2 - version 2.0
 - Tech 3 - version 3.0
 
+## Dependencies
+- Tkinter - pip install tk
+- NumPy   - pip install numpy
+- OpenCV  - pip install opencv-python
 
 ## Features
 List the ready features here:
