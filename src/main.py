@@ -42,6 +42,14 @@ def find_covariance(dataset):
         cov = np.concatenate((cov, dataset[i] - mean), axis=1)
     return np.matmul(cov, cov.T)
 
+def find_eigen(cov):
+    a = cov
+    for i in range(256):
+        q, r = np.linalg.qr(a)
+        a = np.dot(r, q)
+    e = [a[i][i] for i in range(256)]
+    return e
+
 def sort_eigen(cov):
     eigenVal, eigenVec  = np.linalg.eig(cov)
     idx = eigenVal.argsort()[::-1]
@@ -52,6 +60,11 @@ def sort_eigen(cov):
 def __main__():
     read_training_data_set("Robert Downey Jr")
     t.tic()
+    # eigenval, eigenvec = np.linalg.eig(find_covariance(imgfaces))
+    # print(eigenval)
+    # print(eigenvec)
+    e = find_eigen(find_covariance(imgfaces))
+    # print(e)
     eigens = sort_eigen(find_covariance(imgfaces))
     print((eigens.T)[0].shape)
     res = np.matmul(eigens, imgfaces[0]-mean_phi(imgfaces))
