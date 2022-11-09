@@ -3,6 +3,8 @@ import numpy as np
 import os
 import timeHandling as t
 from PIL import Image as im
+import sympy as sp
+from sympy import linsolve
 
 w, h = 256, 256
 
@@ -47,8 +49,13 @@ def find_eigen(cov):
     for i in range(256):
         q, r = np.linalg.qr(a)
         a = np.dot(r, q)
+        if i == 0:
+            qvec = q
+        else:
+            qvec = np.dot(qvec,q)
     e = [a[i][i] for i in range(256)]
-    return e
+    e.sort()
+    return e, qvec
 
 def sort_eigen(cov):
     eigenVal, eigenVec  = np.linalg.eig(cov)
@@ -60,11 +67,13 @@ def sort_eigen(cov):
 def __main__():
     read_training_data_set("Robert Downey Jr")
     t.tic()
-    # eigenval, eigenvec = np.linalg.eig(find_covariance(imgfaces))
+    eigenval, eigenvec = np.linalg.eig(find_covariance(imgfaces))
+    eigenval.sort()
     # print(eigenval)
     # print(eigenvec)
-    e = find_eigen(find_covariance(imgfaces))
+    e, q = find_eigen(find_covariance(imgfaces))
     # print(e)
+    # print(q)   
     eigens = sort_eigen(find_covariance(imgfaces))
     print((eigens.T)[0].shape)
     res = np.matmul(eigens, imgfaces[0]-mean_phi(imgfaces))
