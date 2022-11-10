@@ -3,10 +3,8 @@ import numpy as np
 import os
 import timeHandling as t
 from PIL import Image as im
-import sympy as sp
-from sympy import linsolve
 
-w, h = 256, 256
+w, h = 256,256
 
 imgfaces = []
 def read_training_data_set(nama):
@@ -44,18 +42,70 @@ def find_covariance(dataset):
         cov = np.concatenate((cov, dataset[i] - mean), axis=1)
     return np.matmul(cov, cov.T)
 
+def norm(vector):
+    norm = 0
+    for i in vector:
+        norm += (i ** 2)
+    norm = norm ** (1/2)
+    return norm
+
+def ortho(u,temp):
+    ortho = 0
+    norm2 = norm(u) ** 2
+    for i in range(len(u)):
+        ortho += (u[i] * temp[i])
+    ortho /= norm2
+    ortho = np.multiply(ortho, u)
+    return ortho
+
+def getQR(matrix):
+    n = len(matrix)
+    q = [[0 for i in range(n)] for j in range(n)]
+    q = np.reshape(q, (n, n))
+    q = q.astype('float')
+    r = [[0 for i in range(n)] for j in range(n)]
+    r = np.reshape(r, (n, n))
+    temp = [0 for i in range(n)]
+    for i in range(n):
+        temp = np.array(matrix[:, i])
+        temp = np.reshape(temp, n)
+        for j in range(0, i):
+            u = np.array(q[:, j])
+            u = np.reshape(u, n)
+            temp = np.subtract(temp, ortho(u, temp))
+        for k in range(n):
+            q[k][i] = temp[k]
+    for l in range(n):
+        temp = np.array(q[:, l])
+        temp = np.reshape(temp, n)
+        temp = np.divide(temp, norm(temp))
+        for m in range(n):
+            q[m][l] = temp[m]
+    r = np.dot(q.T, matrix)
+    return q, r
+
+def isTriangle(matrix):
+    triangle = True
+    for i in range(1, len(matrix)):
+        for j in range(i):
+            if (matrix[i][j] > 0.0001 or matrix[j][i] < -0.0001):
+                triangle = False
+    return triangle
+
 def find_eigen(cov):
     a = cov
-    for i in range(256):
-        q, r = np.linalg.qr(a)
-        a = np.dot(r, q)
-        if i == 0:
-            qvec = q
-        else:
-            qvec = np.dot(qvec,q)
-    e = [a[i][i] for i in range(256)]
-    e.sort()
-    return e, qvec
+    triangle = False
+    n = len(cov)
+    eVec = np.eye(n)
+    count = 0
+    while (not(triangle)):
+        q,r = getQR(a)
+        triangle = isTriangle(np.dot(r, q))
+        if (not(triangle)):
+            a = np.dot(r, q)
+            eVec = np.dot(eVec, q)
+    e = [a[i][i] for i in range(n)]
+    return e, eVec
 
 def sort_eigen(cov):
     eigenVal, eigenVec  = np.linalg.eig(cov)
@@ -67,13 +117,12 @@ def sort_eigen(cov):
 def __main__():
     read_training_data_set("Robert Downey Jr")
     t.tic()
-    eigenval, eigenvec = np.linalg.eig(find_covariance(imgfaces))
-    eigenval.sort()
-    # print(eigenval)
-    # print(eigenvec)
+    #eigenval, eigenvec = np.linalg.eig(find_covariance(imgfaces))
+    #print(eigenval)
+    #print(eigenvec)
     e, q = find_eigen(find_covariance(imgfaces))
-    # print(e)
-    # print(q)   
+    #print(e)
+    #print(q)   
     eigens = sort_eigen(find_covariance(imgfaces))
     print((eigens.T)[0].shape)
     res = np.matmul(eigens, imgfaces[0]-mean_phi(imgfaces))
