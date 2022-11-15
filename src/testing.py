@@ -1,10 +1,8 @@
 import cv2
 import numpy as np
 import os
-import Tools.timehandling as t
+import timehandling as t
 import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-from PIL import Image as im
 
 w, h = 256, 256
 
@@ -14,7 +12,7 @@ def illegal_eigen_vec(matrix):
 
 def read_training_data_set(nama, dataset):
     path = os.getcwd()
-    path = path + "\\test\\training\\" + nama
+    path = path + "\\test\\database\\" + nama
     dir_list = os.listdir(path)
     for pic in dir_list:
         if pic.endswith('.jpg'):
@@ -55,22 +53,23 @@ def EuclideanDistance(newImg, testImg):
 
 def main():
     database = []
-    read_training_data_set("JuanNicholas", database)
+    read_training_data_set("Robert Downey Jr", database)
     mean = mean_phi(database)
     covMat = find_covariance(database)
     eigenVec = illegal_eigen_vec(covMat)
+
     eigenFaceVector = []
     for i in range(len(database)):
         eigenFaceVector.append(np.matmul(eigenVec, database[i]-mean))
 
-    sampleImg = cv2.imread("test\\training\\Testing.jpg", cv2.IMREAD_GRAYSCALE)
+    sampleImg = cv2.imread("test\\testimage\\testing.jpg", cv2.IMREAD_GRAYSCALE)
     sampleImg = cv2.resize(sampleImg, (w, h))
     selisihSam = sampleImg-mean
     EigFaceSam = np.matmul(eigenVec, selisihSam)
     
     eucDistance = []
     for i in range(len(eigenFaceVector)):
-        eucDistance.append(EuclideanDistance(EigFaceSam))
+        eucDistance.append(EuclideanDistance(EigFaceSam, eigenFaceVector[i]))
         print("Distance from image " + str(i) + " is " + str(eucDistance[i]))
 
     min = eucDistance[0]
