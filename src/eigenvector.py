@@ -1,14 +1,7 @@
 import numpy as np
 
 # Fungsi mencari nilai eigen dengan algoritma QR #
-def eigen_qr(cov):
-    a = cov
-    for i in range(256):
-        q, r = np.linalg.qr(a)
-        a = np.dot(r, q)
-    e = [a[i][i] for i in range(256)]
-    return e
-
+# The norm of a vector
 def norm(vector):
     norm = 0
     for i in vector:
@@ -16,41 +9,39 @@ def norm(vector):
     norm = norm ** (1/2)
     return norm
 
-def ortho(u,temp):
-    ortho = 0
+# Projection of u on a
+def proj(u,a):
+    proj = 0
     norm2 = norm(u) ** 2
     for i in range(len(u)):
-        ortho += (u[i] * temp[i])
-    ortho /= norm2
-    ortho = np.multiply(ortho, u)
-    return ortho
+        proj += (u[i] * a[i])
+    proj /= norm2
+    proj = np.multiply(proj, u)
+    print(proj)
+    return proj
 
+# QR decomposition
 def getQR(matrix):
     n = len(matrix)
-    q = [[0 for i in range(n)] for j in range(n)]
-    q = np.reshape(q, (n, n))
-    q = q.astype('float')
-    r = [[0 for i in range(n)] for j in range(n)]
-    r = np.reshape(r, (n, n))
-    temp = [0 for i in range(n)]
+    q = np.zeros((n,n))
+    a = np.zeros((n,n))
+    u = np.zeros((n,n))
     for i in range(n):
-        temp = np.array(matrix[:, i])
-        temp = np.reshape(temp, n)
+        a[i] = matrix.T[i]
+        u[i] = a[i]
         for j in range(0, i):
-            u = np.array(q[:, j])
-            u = np.reshape(u, n)
-            temp = np.subtract(temp, ortho(u, temp))
-        for k in range(n):
-            q[k][i] = temp[k]
-    for l in range(n):
-        temp = np.array(q[:, l])
-        temp = np.reshape(temp, n)
-        temp = np.divide(temp, norm(temp))
-        for m in range(n):
-            q[m][l] = temp[m]
+            if (norm(u[j]) != 0):
+                u[i] -= proj(u[j], a[i])
+        print(u[i])
+        if (norm(u[i]) != 0):
+            q[i] = np.divide(u[i], norm(u[i]))
+        else:
+            q[i] = 0
+    q = q.T
     r = np.dot(q.T, matrix)
     return q, r
 
+# Checking for upper triangular matrix
 def isTriangle(matrix):
     triangle = True
     for i in range(1, len(matrix)):
@@ -59,20 +50,24 @@ def isTriangle(matrix):
                 triangle = False
     return triangle
 
+# Finding eigen with QR algorithm
 def find_eigen(cov):
     a = cov
     triangle = False
     n = len(cov)
     eVec = np.eye(n)
-    count = 0
     while (not(triangle)):
-        q,r = getQR(a)
+        q,r = np.linalg.qr(a)
         triangle = isTriangle(np.dot(r, q))
         if (not(triangle)):
             a = np.dot(r, q)
             eVec = np.dot(eVec, q)
-    e = [a[i][i] for i in range(n)]
+    e = [a[i][i] for i in range(len(cov))]
     return e, eVec
+
+def find_eigen2(A, eVec):
+    eig = np.dot(A,eVec[0])
+    return eig
 
 def sort_eigen(cov):
     eigenVal, eigenVec  = np.linalg.eig(cov)

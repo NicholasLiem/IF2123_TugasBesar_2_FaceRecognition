@@ -3,16 +3,17 @@ import numpy as np
 import timehandling as t
 import imgparsing as ip
 import matrixprocessing as mp
+import eigenvector as ev
 
 
 def illegal_eigen_vec(matrix):
     eigenval, eigenvec = np.linalg.eig(matrix)
-    return eigenvec
+    return eigenval, eigenvec
 
 def process(database, testImage):
     mean = mp.mean_phi(database)
     covMat = mp.find_covariance(database)
-    eigenVec = illegal_eigen_vec(covMat)
+    eigenVal, eigenVec = ev.find_eigen(covMat)
 
     eigenFaceVector = mp.EFD(database, mean, eigenVec)
 
