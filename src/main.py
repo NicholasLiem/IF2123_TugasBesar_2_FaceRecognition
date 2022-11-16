@@ -4,6 +4,7 @@ import timehandling as t
 import imgparsing as ip
 import matrixprocessing as mp
 import eigenvector as ev
+from PIL import Image as im
 
 
 def illegal_eigen_vec(matrix):
@@ -14,14 +15,19 @@ def process(database, testImage):
     mean = mp.mean_phi(database)
     covMat = mp.find_covariance(database)
     eigenVal, eigenVec = ev.find_eigen(covMat)
+    t.tac()
 
-    eigenFaceVector = mp.EFD(database, mean, eigenVec)
-
+    eigenFaceVector = mp.EFD1(database, mean, eigenVec)
+    t.tac()
     sampleImg = ip.read_image(testImage)
-    selisihSam = sampleImg-mean
-    EigFaceSam = np.matmul(eigenVec, selisihSam)
-    
-    euclideanDistanceList = mp.EDL(eigenFaceVector, EigFaceSam)
+    selisihSam = (sampleImg-mean).reshape((256*256,1))
+    # EigFaceSam = np.matmul(eigenVec, selisihSam)
+    w = np.zeros((1,10))
+    for j in range (10):
+        w[0][j] = np.dot(ev.find_eigenface(mp.matrix_A(database),eigenVec[j]).T,selisihSam)
+    t.tac()
+    euclideanDistanceList = mp.EDL(eigenFaceVector, w)
+    t.tac()
     for item in euclideanDistanceList:
         print(item)
     idx = mp.findClosestImageIdx(euclideanDistanceList)

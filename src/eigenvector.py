@@ -56,17 +56,20 @@ def find_eigen(cov):
     triangle = False
     n = len(cov)
     eVec = np.eye(n)
+    count = 0
     while (not(triangle)):
         q,r = np.linalg.qr(a)
         triangle = isTriangle(np.dot(r, q))
         if (not(triangle)):
             a = np.dot(r, q)
-            eVec = np.dot(eVec, q)
+        eVec = np.dot(eVec, q)
+        count += 1
     e = [a[i][i] for i in range(len(cov))]
     return e, eVec
 
-def find_eigen2(A, eVec):
-    eig = np.dot(A,eVec[0])
+def find_eigenface(A, eVec):
+    eig = np.dot(A, eVec)
+    eig = eig.reshape((256*256))
     return eig
 
 def sort_eigen(cov):
