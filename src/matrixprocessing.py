@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 import eigenvector as ev
-import timehandling as t
 
 w, h = 256, 256
 
