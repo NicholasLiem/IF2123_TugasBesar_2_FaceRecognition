@@ -40,9 +40,9 @@ def main():
     for i in range(K):
         eigenFaceArray.append(np.matmul(matrixA, eigenvec[i]))
 
-    # eigenface_titles = ["eigenface %d" % i for i in range(len(eigenFaceArray))]
-    # plot_portraits(eigenFaceArray, eigenface_titles, h, w, 2, 5)
-    # plt.show()
+    eigenface_titles = ["eigenface %d" % i for i in range(len(eigenFaceArray))]
+    plot_portraits(eigenFaceArray, eigenface_titles, h, w, 2, 5)
+    plt.show()
 
     # "Database koefisien2 semua wajah, rumusnya eigenFace.T dot wajah mean database"
     omega = []
@@ -52,7 +52,7 @@ def main():
             temp.append(np.dot(eigenFaceArray[j].T, meandatabase[i].reshape(w*h, 1)))
         omega.append(temp)
 
-    testImage = ip.read_image("testing.jpg")
+    testImage = ip.read_image("testing1.jpg")
     testImage = abs(testImage-mp.mean_phi(database))
 
     koefisienKomponenTestImage = []

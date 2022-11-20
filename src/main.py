@@ -4,8 +4,6 @@ import timehandling as t
 import imgparsing as ip
 import matrixprocessing as mp
 import eigenvector as ev
-from PIL import Image as im
-
 
 def illegal_eigen_vec(matrix):
     eigenval, eigenvec = np.linalg.eig(matrix)
