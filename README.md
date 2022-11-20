@@ -56,7 +56,7 @@ Project is: _complete_
 Include areas you believe need improvement / could be improved. Also add TODOs for future development.
 
 Room for improvement:
-- Menurunkan pemrosesan pencocokan wajah dengan optimisasi algoritma QR untuk mencari vektor eigen.
+- Menurunkan waktu pemrosesan pencocokan wajah dengan optimisasi algoritma QR untuk mencari vektor eigen.
 
 
 ## Acknowledgements
