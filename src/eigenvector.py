@@ -36,35 +36,21 @@ def getQR(matrix):
         norm1 = norm(u[i])
         if (norm1 != 0):
             q[i] = np.divide(u[i], norm1)
-    # q[n-1][n-1] 
     q = np.multiply(q.T,-1)
     r1 = np.dot(q.T, matrix)
     r = np.triu(r1)
     return q, r
 
-# Checking for upper triangular matrix
-def isTriangle(matrix):
-    triangle = True
-    for i in range(1, len(matrix)):
-        for j in range(i):
-            if (matrix[i][j] > 0.0001 or matrix[i][j] < -0.0001):
-                triangle = False
-    return triangle
-
 # Finding eigen with QR algorithm
 def find_eigen(cov):
     a = cov
-    triangle = False
     n = len(cov)
     eVec = np.eye(n)
     count = 0
-    while (not(triangle)):
+    while (not(np.allclose(a, np.triu(a), 0.0001))):
         # q,r = getQR(a)
         q,r = np.linalg.qr(a)
-        temp = np.dot(r,q)
-        triangle = isTriangle(temp)
-        if (not(triangle)):
-            a = temp
+        a = np.dot(r,q)
         eVec = np.dot(eVec, q)
         count += 1
     e = [a[i][i] for i in range(len(cov))]

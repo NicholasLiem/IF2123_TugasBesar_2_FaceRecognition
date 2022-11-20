@@ -12,24 +12,19 @@ def illegal_eigen_vec(matrix):
     return eigenval, eigenvec
 
 def process(database, testImage):
+    n = len(database)
+    n1 = round(n/3)
     mean = mp.mean_phi(database)
     covMat = mp.find_covariance(database)
     eigenVal, eigenVec = ev.find_eigen(covMat)
-    t.tac()
 
     eigenFaceVector = mp.EFD1(database, mean, eigenVec)
-    t.tac()
     sampleImg = ip.read_image(testImage)
     selisihSam = (sampleImg-mean).reshape((256*256,1))
-    # EigFaceSam = np.matmul(eigenVec, selisihSam)
-    w = np.zeros((1,10))
-    for j in range (10):
+    w = np.zeros((1,n1))
+    for j in range (n1):
         w[0][j] = np.dot(ev.find_eigenface(mp.matrix_A(database),eigenVec[j]).T,selisihSam)
-    t.tac()
     euclideanDistanceList = mp.EDL(eigenFaceVector, w)
-    t.tac()
-    for item in euclideanDistanceList:
-        print(item)
     idx = mp.findClosestImageIdx(euclideanDistanceList)
     print("Closest image index: " + str(idx))
     return idx
