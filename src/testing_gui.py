@@ -1,4 +1,5 @@
 import tkinter as tk
+import os
 from PIL import ImageTk, Image
 from tkinter import filedialog
 
@@ -31,10 +32,13 @@ class WelcomePage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text = "Welcome Page\n")
+        
+        img = ImageTk.PhotoImage(Image.open("doc/meme/idk.jpg").resize((512, 512)))
+        label = tk.Label(self, image = img)
+        label.image = img
         label.pack()
 
-        btn = tk.Button(self, text=  "To Page Upload", command=lambda: controller.up_frame("LobbyPage"))
+        btn = tk.Button(self, text=  "To Main Program", command=lambda: controller.up_frame("LobbyPage"))
         btn.pack()
 
 # Class ini buat lobby page di mana kita bisa upload gambar, tunjukkin gambar yang cocok (fitur spek)
@@ -79,4 +83,5 @@ class WebcamPage(tk.Frame):
 
 if __name__ == '__main__':
     app = MainFrame()
+    app.resizable(False, False) 
     app.mainloop()
