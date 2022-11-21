@@ -17,7 +17,6 @@ def proj(u,a):
         proj += (u[i] * a[i])
     proj /= norm2
     proj = np.multiply(proj, u)
-    print(proj)
     return proj
 
 # QR decomposition
@@ -26,55 +25,39 @@ def getQR(matrix):
     q = np.zeros((n,n))
     a = np.zeros((n,n))
     u = np.zeros((n,n))
+    r = np.zeros((n,n))
+    norm1 = None
     for i in range(n):
         a[i] = matrix.T[i]
         u[i] = a[i]
         for j in range(0, i):
             if (norm(u[j]) != 0):
                 u[i] -= proj(u[j], a[i])
-        print(u[i])
-        if (norm(u[i]) != 0):
-            q[i] = np.divide(u[i], norm(u[i]))
-        else:
-            q[i] = 0
-    q = q.T
-    r = np.dot(q.T, matrix)
+        norm1 = norm(u[i])
+        if (norm1 != 0):
+            q[i] = np.divide(u[i], norm1)
+    q = np.multiply(q.T,-1)
+    r1 = np.dot(q.T, matrix)
+    r = np.triu(r1)
     return q, r
-
-# Checking for upper triangular matrix
-def isTriangle(matrix):
-    triangle = True
-    for i in range(1, len(matrix)):
-        for j in range(i):
-            if (matrix[i][j] > 0.0001 or matrix[j][i] < -0.0001):
-                triangle = False
-    return triangle
 
 # Finding eigen with QR algorithm
 def find_eigen(cov):
     a = cov
-    triangle = False
     n = len(cov)
     eVec = np.eye(n)
     count = 0
-    while (not(triangle)):
+    while (not(np.allclose(a, np.triu(a), 0.0001))):
+        # q,r = getQR(a)
         q,r = np.linalg.qr(a)
-        triangle = isTriangle(np.dot(r, q))
-        if (not(triangle)):
-            a = np.dot(r, q)
+        a = np.dot(r,q)
         eVec = np.dot(eVec, q)
         count += 1
     e = [a[i][i] for i in range(len(cov))]
+    eVec = np.absolute(eVec)
     return e, eVec
 
 def find_eigenface(A, eVec):
     eig = np.dot(A, eVec)
     eig = eig.reshape((256*256))
     return eig
-
-def sort_eigen(cov):
-    eigenVal, eigenVec  = np.linalg.eig(cov)
-    idx = eigenVal.argsort()[::-1]
-    eigenVal = eigenVal[idx]
-    eigenVec = eigenVec[:,idx]
-    return eigenVec
