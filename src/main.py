@@ -9,6 +9,15 @@ def illegal_eigen_vec(matrix):
     eigenval, eigenvec = np.linalg.eig(matrix)
     return eigenval, eigenvec
 
+def percent_match(w, nilai, k):
+    hasil = nilai
+    for i in range(k):
+        hasil = hasil + w[0][i]**2
+    hasil = np.sqrt(hasil)
+    hasil = nilai/hasil
+    hasil = 1/(1+hasil)
+    return (hasil*100)
+
 def process(database, testImage):
     n = len(database)
     n1 = round(n/3)
@@ -24,14 +33,15 @@ def process(database, testImage):
         w[0][j] = np.dot(ev.find_eigenface(mp.matrix_A(database),eigenVec[j]).T,selisihSam)
     euclideanDistanceList = mp.EDL(eigenFaceVector, w)
     idx = mp.findClosestImageIdx(euclideanDistanceList)
+    percent_match(w, euclideanDistanceList[idx], n1)
     print("Closest image index: " + str(idx))
     return idx
 
 def __main__():
     t.tic()
     database = []
-    ip.read_training_data_set("Gabungan", database)
-    idx = process(database, "testt.jpg")
+    ip.read_training_data_set("Nicholas", database)
+    idx = process(database, "test123.jpeg")
     ip.print_img(database[idx])
     t.tac()
 
