@@ -54,6 +54,7 @@ def find_eigen(cov):
         eVec = np.dot(eVec, q)
         count += 1
     e = [a[i][i] for i in range(len(cov))]
+    eVec = np.absolute(eVec)
     return e, eVec
 
 def find_eigenface(A, eVec):
