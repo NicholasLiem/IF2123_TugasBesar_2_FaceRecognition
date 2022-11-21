@@ -34,7 +34,8 @@ def process(database, testImage):
     idx = mp.findClosestImageIdx(euclideanDistanceList)
     percent_match(w, euclideanDistanceList[idx], n1)
     print("Closest image index: " + str(idx))
-    return idx
+    
+    return idx, w, euclideanDistanceList, n1
 
 def __main__():
     t.tic()
@@ -42,7 +43,8 @@ def __main__():
     datalabel = []
     ip.read_training_data_set("Gabungan", database,datalabel)
     idx = process(database, "test123.jpeg")
-    ip.print_img(database[idx])
+    idxs = idx[0]
+    ip.print_img(database[idxs])
     t.tac()
 
 if __name__ == '__main__':
