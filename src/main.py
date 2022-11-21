@@ -13,7 +13,7 @@ def illegal_eigen_vec(matrix):
 
 def process(database, testImage):
     n = len(database)
-    n1 = round(n/3)
+    n1 = round(n/2)
     mean = mp.mean_phi(database)
     covMat = mp.find_covariance(database)
     eigenVal, eigenVec = ev.find_eigen(covMat)
