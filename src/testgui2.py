@@ -108,6 +108,7 @@ class LobbyPage(tk.Frame):
             # PhotoImage class is used to add image to widgets, icons etc
             img = ImageTk.PhotoImage(img)
             my_image = tk.Label(frame4, image=img)
+            my_image.image = img
             my_image.grid(column=0,row=1)
             imagename = cutstring(x)
             labelImage.config(text=imagename)
@@ -207,8 +208,8 @@ class WebcamPage(tk.Frame):
         labelWebcam = tk.Label(frame2,text="Webcam View",font=("Helvetica",12))
         labelWebcam.grid(column=0,row=0)
 
-        # frame_webcam = tk.Label(self,width=20,height=20,highlightbackground="black",highlightthickness="1")
-        # frame_webcam.pack()
+        frame_webcam = tk.Label(self,width=20,height=20,highlightbackground="black",highlightthickness="1")
+        frame_webcam.pack()
 
 
 
