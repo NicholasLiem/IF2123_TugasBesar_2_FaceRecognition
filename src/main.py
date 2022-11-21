@@ -16,6 +16,7 @@ def percent_match(w, nilai, k):
     hasil = np.sqrt(hasil)
     hasil = nilai/hasil
     hasil = 1/(1+hasil)
+    print("Percent Match:", hasil*100)
     return (hasil*100)
 
 def process(database, testImage):
