@@ -128,9 +128,12 @@ class LobbyPage(tk.Frame):
             datalabel = []
             imp.read_training_data_set(foldernames,database,datalabel)
             idx = main.process(database,cutstring(filename))
-            # imp.print_img(database[idx])
-            # plt.imshow(database[idx])
-            resultImg = Image.fromarray(database[idx])
+
+            path = os.getcwd() + "\\test\\database\\" + foldernames + "\\" + datalabel[idx]
+            # resultImg = Image.fromarray(database[idx])
+            
+            resultImg = Image.open(path)
+            resultImg = resultImg.resize((256,256))
             resultImg = ImageTk.PhotoImage(resultImg)
             res_img = tk.Label(frame5,image=resultImg)
             res_img.image = resultImg
