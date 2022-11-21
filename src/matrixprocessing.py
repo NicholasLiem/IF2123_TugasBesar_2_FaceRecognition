@@ -1,12 +1,7 @@
-import cv2
 import numpy as np
 import eigenvector as ev
 
 w, h = 256, 256
-
-def illegal_eigen_vec(matrix):
-    eigenval, eigenvec = np.linalg.eig(find_covariance(matrix))
-    return eigenvec
 
 # Fungsi mencari nilai mean #
 def mean_phi(dataset):
@@ -52,25 +47,6 @@ def EFD1(database, mean, eigenVec):
         for j in range (n1):
             w[i][j] = np.dot((e[j].reshape((1,256*256))),training)
     return w
-
-def EFD(database, mean, eigenvec):
-    eigenFaceDatabase = []
-    for i in range(len(database)):
-        eigenFaceDatabase.append(np.matmul(eigenvec, database[i]-mean))
-    return eigenFaceDatabase
-
-def EFT1(testImage, eigenvec, mean, database):
-    testImage = cv2.resize(testImage, (w, h))
-    selisihImage = abs(testImage-mean)
-    eigenFaces = EFD1(database, eigenvec)
-    eigenFaceTest = np.linalg.solve(eigenFaces, selisihImage.resize(w*h))
-    return eigenFaceTest
-
-def EFT(testImage, eigenvec, mean):
-    testImage = cv2.resize(testImage, (w, h))
-    selisihImage = abs(testImage-mean)
-    eigenFaceTest = np.matmul(eigenvec, selisihImage)
-    return eigenFaceTest
 
 def EDL(eigenFaceDatabase, eigenFaceTest):
     eDList = []

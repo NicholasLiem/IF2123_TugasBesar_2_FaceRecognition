@@ -5,10 +5,6 @@ import imgparsing as ip
 import matrixprocessing as mp
 import eigenvector as ev
 
-def illegal_eigen_vec(matrix):
-    eigenval, eigenvec = np.linalg.eig(matrix)
-    return eigenval, eigenvec
-
 def percent_match(w, nilai, k):
     hasil = nilai
     for i in range(k):
