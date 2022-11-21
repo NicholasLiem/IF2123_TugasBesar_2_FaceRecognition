@@ -39,15 +39,17 @@ def EuclideanDistance(newImg, testImg):
     return dist
 
 def EFD1(database, mean, eigenVec):
-    w = np.zeros((len(database),10))
+    n = len(database)
+    n1 = round(n / 3)
+    w = np.zeros((n,n1))
     training = np.zeros((256,256))
-    e = np.zeros((10,256*256))
-    for i in range(10):
+    e = np.zeros((n1,256*256))
+    for i in range(n1):
         e[i] = ev.find_eigenface(matrix_A(database),eigenVec[i])
-    for i in range(len(database)):
+    for i in range(n):
         training = database[i] - mean
         training = training.reshape((256*256,1))
-        for j in range (10):
+        for j in range (n1):
             w[i][j] = np.dot((e[j].reshape((1,256*256))),training)
     return w
 
