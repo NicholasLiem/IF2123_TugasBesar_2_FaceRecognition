@@ -45,9 +45,6 @@ class WelcomePage(tk.Frame):
         btn = tk.Button(self, text=  "To Face Recognition Page", font = ("Helvetica",14), command=lambda: controller.up_frame("LobbyPage"))
         btn.grid(row=1,column=0, pady=10)
 
-        # btn2 = tk.Button(self, text = "To Webcam Page", font = ("Helvetica",14),command = lambda: controller.up_frame("WebcamPage"))
-        # btn2.grid(row=2,column=0, pady=10)
-
         img = ImageTk.PhotoImage(Image.open("doc/meme/idk.jpg").resize((356,356)))
         label = tk.Label(self, image = img)
         label.image = img
@@ -74,10 +71,10 @@ class LobbyPage(tk.Frame):
 
         # frame untuk body program (bagian insert data dan tampilan image)
         frameBody = tk.Frame(self, padx=5,pady=5)
-        frameBody.pack(pady=20,padx=20)
+        frameBody.pack(pady=0,padx=0)
 
         # frame dalam frameBody untuk bagian insert data dan tampilan hasil run program
-        frame3 = tk.Frame(frameBody,padx=5,pady=5,width=300)
+        frame3 = tk.Frame(frameBody,padx=5,pady=5)
         frame3.pack(side="left",padx=5)
 
         # fungsi untuk open folder
@@ -97,7 +94,7 @@ class LobbyPage(tk.Frame):
         btn1.grid(row=1,column=0,padx=10)
 
         # menampilkan nama folder yang dipilih
-        labelFolder = tk.Label(frame3, text="No Folder", font=("Helvetica",10))
+        labelFolder = tk.Label(frame3, text="No Folder Choosen", font=("Helvetica",10), bg="#D3D3D3")
         labelFolder.grid(row=1,column=1)
         
         # menampilkan tulisan "Insert Your Image" pada frame3
@@ -152,7 +149,8 @@ class LobbyPage(tk.Frame):
             database = []
             datalabel = []
             imp.read_training_data_set(foldernames,database,datalabel)
-            idx = main.process(database,cutstring(filename))
+            hasil = main.process(database,cutstring(filename))
+            idx = hasil[0]
 
             # selesai menghitung waktu proses
             t.tac()
@@ -179,29 +177,44 @@ class LobbyPage(tk.Frame):
 
             # menampilkan nama image yang cocok dari hasil face recognition
             labelResult.config(text=datalabel[idx])
-        
+
+            # memproses percent_match dan menampilkannya
+            w = hasil[1]
+            nilai = hasil[2]
+            k = hasil[3]
+            persen = main.percent_match(w,nilai[idx],k)
+            persen = round(persen,2)
+            persen_text = str(persen) + "%"
+            labelPersenRes.config(text=persen_text)
+
         # button untuk memilih image yang ingin dipakai
         btn2 = tk.Button(frame3, text="Choose Image", font=("Helvetica",12),command=open_img)
-        btn2.grid(row=3,column=0,padx=10)
+        btn2.grid(row=3,column=0,padx=15)
 
         # menampilkan nama image yang dipilih
-        labelImage = tk.Label(frame3, text="No Image",font=("Helvetica",10))
+        labelImage = tk.Label(frame3, text="No Image Choosen",font=("Helvetica",10), bg="#D3D3D3")
         labelImage.grid(row=3,column=1)
 
         # menampilkan nama image yang paling mendekati test image
         label3 = tk.Label(frame3, text="Result :", font=("Helvetica",13))
-        label3.grid(row=4,column=0,pady=15)
+        label3.grid(row=4,column=0,pady=10)
         labelResult = tk.Label(frame3, text="Hasil Test", font=("Helvetica",13), fg="green")
         labelResult.grid(row=5,column=0)
 
         # menampilkan waktu execution time
         labelTime = tk.Label(frame3, text ="Execution Time :", font=("Helvetica",13))
-        labelTime.grid(row=6,column=0,pady=15,padx=5)
+        labelTime.grid(row=6,column=0,pady=10,padx=5)
         labelTimeRes = tk.Label(frame3, text = "Time Result", font=("Helvetica",13), fg = "green")
         labelTimeRes.grid(row=7, column=0)
 
+        # menampilkan percent_match
+        labelPersen = tk.Label(frame3, text = "Percent Matched :",font=("Helvetica",13), pady=10)
+        labelPersen.grid(row=8,column=0)
+        labelPersenRes = tk.Label(frame3, text="???", font=("Helvetica",13), fg="green")
+        labelPersenRes.grid(row=8,column=1)
+
         # frame dalam frameBody untuk bagian menampilkan image test
-        frame4 = tk.Frame(frameBody,padx=5,pady=5,width=300)
+        frame4 = tk.Frame(frameBody,padx=5,pady=5)
         frame4.pack(side="left",padx=5)
 
         # menampilkan tulisan "Test Image" pada frame4 (di bagian atas image test)
@@ -214,12 +227,8 @@ class LobbyPage(tk.Frame):
         label.image = placeHolderTest
         label.grid(row=1,column=0)
 
-        # frame untuk menampilkan placeholder untuk image test
-        # frame_image = tk.Frame(frame4,width=256,height=256,highlightbackground="black",highlightthickness=1)
-        # frame_image.grid(row=1,column=0)
-
         # frame dalam frameBody untuk bagian menampilkan image result
-        frame5 = tk.Frame(frameBody,padx=5,pady=5,width=300)
+        frame5 = tk.Frame(frameBody,padx=5,pady=5)
         frame5.pack(side="left",padx=5)
         
         # menampilkan tulisan "Closest Result" pada frame5 (di bagian atas image result)
@@ -231,10 +240,6 @@ class LobbyPage(tk.Frame):
         labelRes = tk.Label(frame5, image = placeHolderRes)
         labelRes.image = placeHolderRes
         labelRes.grid(row=1,column=0)
-
-        # frame untuk menampilkan placeholder untuk image result
-        # frame_result = tk.Frame(frame5,width=256,height=256,highlightbackground="black",highlightthickness=1)
-        # frame_result.grid(row=1,column=0)
 
         # frame untuk bagian bottom
         frameBottom = tk.Frame(self,padx=5, pady=5)
@@ -248,58 +253,6 @@ class LobbyPage(tk.Frame):
         btnExecute = tk.Button(frameBottom, text="Proceed Recognition",font=("Helvetica",15,"bold"),command=processRecognition)
         btnExecute.pack(side="left",padx=210)
 
-        # button untuk berpindah ke webcam page
-        # btnWebcam = tk.Button(frameBottom, text="Webcam Page", command =lambda: controller.up_frame("WebcamPage"), justify="left")
-        # btnWebcam.pack(side="right",padx=100)
-
-
-# Class ini buat webcam page di mana kita bisa ngecapture gambar, tunjukkin gambar yang cocok juga (bonus)
-# class WebcamPage(tk.Frame):
-#     def __init__(self, parent, controller):
-#         tk.Frame.__init__(self, parent)
-#         self.controller = controller
-
-#         frameTop = tk.Frame(self, padx=5,pady=5)
-#         frameTop.pack(pady=10,padx=10)
-
-#         label = tk.Label(frameTop, text = "Live Webcam Recognition", font = ("Helvetica",30))
-#         label.pack(pady=10,padx=10)
-
-#         my_canvas = tk.Canvas(frameTop, width=900, height=10)
-#         my_canvas.pack()
-
-#         my_canvas.create_line(0,10,900,10,fill="black")
-
-#         frameBody = tk.Frame(self,padx=5,pady=5)
-#         frameBody.pack(pady=20,padx=20)
-
-#         frame1 = tk.Frame(frameBody, padx=5, pady=5)
-#         frame1.pack(side="left",padx=5)
-
-#         label1 = tk.Label(frame1,text="Insert Your Image Folder",font=("Helvetica",15))
-#         label1.grid(column=0,row=0,padx=10,pady=10)
-
-#         btn1 = tk.Button(frame1,text="Choose Folder",font=("Helvetica",13))
-#         btn1.grid(column=0,row=1,padx=10)
-
-#         labelFolder = tk.Label(frame1,text="No Folder Selected",font=("Helvetica",12))
-#         labelFolder.grid(column=1,row=1)
-
-#         frame2 = tk.Frame(frameBody, padx=5, pady=5)
-#         frame2.pack(side="left",padx=5)
-
-#         labelWebcam = tk.Label(frame2,text="Webcam View",font=("Helvetica",12))
-#         labelWebcam.grid(column=0,row=0)
-
-#         frame_webcam = tk.Label(self,width=20,height=20,highlightbackground="black",highlightthickness="1")
-#         frame_webcam.pack()
-
-#         btn = tk.Button(self, text=  "To Face Recognition Page", command=lambda: controller.up_frame("LobbyPage"))
-#         btn.pack()
-
-
-#         btn2 = tk.Button(self, text = "To Welcome Page", command = lambda: controller.up_frame("WelcomePage"))
-#         btn2.pack()
 
 if __name__ == '__main__':
     app = MainFrame()
