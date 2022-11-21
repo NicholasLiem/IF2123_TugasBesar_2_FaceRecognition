@@ -36,7 +36,7 @@ def __main__():
     t.tic()
     database = []
     ip.read_training_data_set("Gabungan", database)
-    idx = process(database, "testing.jpg")
+    idx = process(database, "testt.jpg")
     ip.print_img(database[idx])
     t.tac()
 
