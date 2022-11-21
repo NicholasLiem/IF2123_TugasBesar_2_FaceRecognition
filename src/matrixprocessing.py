@@ -67,14 +67,4 @@ def findClosestImageIdx(eDList):
             min = eDList[i]
             idx = i
     print("Euclidean Distance: " + str(min))
-    return idx
-
-def percent_match(w, nilai, k):
-    hasil = nilai
-    for i in range(k):
-        hasil = hasil + w[0][i]**2
-    hasil = np.sqrt(hasil)
-    hasil = nilai/hasil
-    hasil = 1/(1+hasil)
-    print("Percent Match:", hasil*100)
-    return (hasil*100)
+    return 

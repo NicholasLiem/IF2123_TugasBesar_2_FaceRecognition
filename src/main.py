@@ -5,6 +5,16 @@ import imgparsing as ip
 import matrixprocessing as mp
 import eigenvector as ev
 
+def percent_match(w, nilai, k):
+    hasil = nilai
+    for i in range(k):
+        hasil = hasil + w[0][i]**2
+    hasil = np.sqrt(hasil)
+    hasil = nilai/hasil
+    hasil = 1/(1+hasil)
+    print("Percent Match:", hasil*100)
+    return (hasil*100)
+
 def process(database, testImage):
 
     # n adalah jumlah gambar pada database
@@ -48,11 +58,11 @@ def process(database, testImage):
     # mencari jarak euclidean gambar uji terhadap setiap gambar database 
     euclideanDistanceList = mp.EDL(eigenFaceVector, w)
 
-    # index gambar dengna jarak euclidean terkecil
+    # index gambar dengan jarak euclidean terkecil
     idx = mp.findClosestImageIdx(euclideanDistanceList)
 
     # mencari % match gambar uji dengan gambar dengan euclidean distance terkecil
-    mp.percent_match(w, euclideanDistanceList[idx], n1)
+    percent_match(w, euclideanDistanceList[idx], n1)
     print("Closest image index: " + str(idx))
     
     return idx, w, euclideanDistanceList, n1
