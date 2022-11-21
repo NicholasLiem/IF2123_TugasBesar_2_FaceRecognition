@@ -67,4 +67,3 @@ def findClosestImageIdx(eDList):
             min = eDList[i]
             idx = i
     print("Euclidean Distance: " + str(min))
-    return 
