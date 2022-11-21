@@ -21,12 +21,10 @@ def process(database, testImage):
     if (n1 > 35):
         n1 = 35
     mean = mp.mean_phi(database)
-    training = mp.training(database,mean)
-    A = mp.matrix_A(training)
-    covMat = mp.find_covariance(A)
+    covMat = mp.find_covariance(database)
     eigenVal, eigenVec = ev.find_eigen(covMat)
 
-    e, eigenFaceVector = mp.EFD1(database, A, training, eigenVec)
+    e, eigenFaceVector = mp.EFD1(database, mean, eigenVec)
     sampleImg = ip.read_image(testImage)
     selisihSam = (sampleImg-mean).reshape((256*256,1))
     w = np.zeros((1,n1))
@@ -44,7 +42,8 @@ def __main__():
     datalabel = []
     ip.read_training_data_set("Gabungan", database,datalabel)
     idx = process(database, "test123.jpeg")
-    ip.print_img(database[idx])
+    idxs = idx[0]
+    ip.print_img(database[idxs])
     t.tac()
 
 if __name__ == '__main__':
