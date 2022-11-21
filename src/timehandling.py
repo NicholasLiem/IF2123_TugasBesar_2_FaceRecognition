@@ -6,6 +6,7 @@ def tic():
     _start_time = time.time()
 
 def tac():
+    global t_sec, t_min, t_hour
     t_sec = round(time.time() - _start_time)
     (t_min, t_sec) = divmod(t_sec,60)
     (t_hour,t_min) = divmod(t_min,60) 

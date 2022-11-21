@@ -5,6 +5,7 @@ from tkinter import filedialog
 import main as main
 import imgparsing as imp
 import matplotlib.pyplot as plt
+import timehandling as t
 
 class MainFrame(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -124,13 +125,20 @@ class LobbyPage(tk.Frame):
             return filename
 
         def processRecognition():
+            t.tic()
             database = []
             datalabel = []
             imp.read_training_data_set(foldernames,database,datalabel)
             idx = main.process(database,cutstring(filename))
+            t.tac()
+
+            hour = f"{t.t_hour:02}"
+            min = f"{t.t_min:02}"
+            sec = f"{t.t_sec:02}"
+            time = hour + "." + min + "." + sec
 
             path = os.getcwd() + "\\test\\database\\" + foldernames + "\\" + datalabel[idx]
-            # resultImg = Image.fromarray(database[idx])
+            labelTimeRes.config(text=time)
             
             resultImg = Image.open(path)
             resultImg = resultImg.resize((256,256))
@@ -222,8 +230,6 @@ class WebcamPage(tk.Frame):
         labelFolder = tk.Label(frame1,text="No Folder Selected",font=("Helvetica",12))
         labelFolder.grid(column=1,row=1)
 
-        
-
         frame2 = tk.Frame(frameBody, padx=5, pady=5)
         frame2.pack(side="left",padx=5)
 
@@ -232,8 +238,6 @@ class WebcamPage(tk.Frame):
 
         frame_webcam = tk.Label(self,width=20,height=20,highlightbackground="black",highlightthickness="1")
         frame_webcam.pack()
-
-
 
         btn = tk.Button(self, text=  "To Face Recognition Page", command=lambda: controller.up_frame("LobbyPage"))
         btn.pack()
