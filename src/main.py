@@ -36,7 +36,7 @@ def process(database, testImage):
     idx = mp.findClosestImageIdx(euclideanDistanceList)
     percent_match(w, euclideanDistanceList[idx], n1)
     print("Closest image index: " + str(idx))
-    return idx
+    return idx, w, euclideanDistanceList, n1
 
 def __main__():
     t.tic()
