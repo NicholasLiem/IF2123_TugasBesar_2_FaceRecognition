@@ -40,7 +40,7 @@ def EuclideanDistance(newImg, testImg):
 
 def EFD1(database, mean, eigenVec):
     n = len(database)
-    n1 = round(n / 3)
+    n1 = round(n / 2)
     w = np.zeros((n,n1))
     training = np.zeros((256,256))
     e = np.zeros((n1,256*256))
