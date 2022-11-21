@@ -36,6 +36,8 @@ def EuclideanDistance(newImg, testImg):
 def EFD1(database, mean, eigenVec):
     n = len(database)
     n1 = round(n / 2)
+    if (n1 > 35):
+        n1 = 35
     w = np.zeros((n,n1))
     training = np.zeros((256,256))
     e = np.zeros((n1,256*256))
@@ -46,7 +48,7 @@ def EFD1(database, mean, eigenVec):
         training = training.reshape((256*256,1))
         for j in range (n1):
             w[i][j] = np.dot((e[j].reshape((1,256*256))),training)
-    return w
+    return e, w
 
 def EDL(eigenFaceDatabase, eigenFaceTest):
     eDList = []
