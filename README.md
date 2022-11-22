@@ -49,7 +49,7 @@
 
 - Untuk menjalankan bonus program (via webcam), jalankan kode di bawah ini.
 
-'python src/bonus_gui.py'
+`python src/bonus_gui.py`
 
 
 ## Project Status
