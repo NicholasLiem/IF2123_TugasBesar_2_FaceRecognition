@@ -11,6 +11,7 @@ def mean_phi(dataset):
     mean = mean / len(dataset)
     return mean
 
+# Fungsi yang mengurangi setiap gambar di database dengan mean face
 def training(dataset, mean):
     n = len(dataset)
     training = np.zeros((n,w*h))
@@ -38,6 +39,7 @@ def EuclideanDistance(newImg, testImg):
     dist = np.sqrt(count)
     return dist
 
+# EFD adalah singkatan dari Eigen Face Datbase, isinya adalah matriks eigen face yang sudah diurutkan dari yang terbesar ke terkecil
 def EFD1(database, A, training, eigenVec):
     n = len(database)
     n1 = round(n / 2)
@@ -52,6 +54,7 @@ def EFD1(database, A, training, eigenVec):
             w[i][j] = np.dot((e[j].reshape((1,256*256))),training[i])
     return e, w
 
+# EDL adalah singkatan dari Euclidean Distance List, isinya adalah list dari euclidean distance dari setiap gambar di database dengan gambar yang diuji
 def EDL(eigenFaceDatabase, eigenFaceTest):
     eDList = []
     for i in range(len(eigenFaceDatabase)):
@@ -59,6 +62,7 @@ def EDL(eigenFaceDatabase, eigenFaceTest):
         # print("Distance from image " + str(i) + " is " + str(eDList[i]))
     return eDList
 
+# Mencari index gambar yang paling mirip dengan gambar yang diuji
 def findClosestImageIdx(eDList):
     min = eDList[0]
     idx = 0
