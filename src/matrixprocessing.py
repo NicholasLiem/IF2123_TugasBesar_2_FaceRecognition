@@ -1,12 +1,7 @@
-import cv2
 import numpy as np
 import eigenvector as ev
 
 w, h = 256, 256
-
-def illegal_eigen_vec(matrix):
-    eigenval, eigenvec = np.linalg.eig(find_covariance(matrix))
-    return eigenvec
 
 # Fungsi mencari nilai mean #
 def mean_phi(dataset):
@@ -16,17 +11,22 @@ def mean_phi(dataset):
     mean = mean / len(dataset)
     return mean
 
+def training(dataset, mean):
+    n = len(dataset)
+    training = np.zeros((n,w*h))
+    for i in range(n):
+        training[i] = (dataset[i] - mean).reshape(w*h)
+    return training
+
 # Fungsi yang digunakan untuk matriks kovarian #
-def matrix_A(dataset):
-    mean = mean_phi(dataset).reshape(w*h, 1)
-    A = dataset[0].reshape(w*h, 1) - mean
-    for i in range (1, len(dataset)):
-        A = np.concatenate((A, dataset[i].reshape(w*h, 1) - mean), axis=1)
+def matrix_A(training):
+    A = training[0].reshape(w*h,1)
+    for i in range (1, len(training)):
+        A = np.concatenate((A, training[i].reshape(w*h,1)), axis=1)
     return A
 
-def find_covariance(dataset):
-    cov = matrix_A(dataset)
-    return np.matmul(cov.T, cov)
+def find_covariance(A):
+    return np.matmul(A.T, A)
 
 # Fungsi yang digunakan untuk mencari euclidean distance #
 def EuclideanDistance(newImg, testImg):
@@ -38,39 +38,19 @@ def EuclideanDistance(newImg, testImg):
     dist = np.sqrt(count)
     return dist
 
-def EFD1(database, mean, eigenVec):
+def EFD1(database, A, training, eigenVec):
     n = len(database)
     n1 = round(n / 2)
+    if (n1 > 35):
+        n1 = 35
     w = np.zeros((n,n1))
-    training = np.zeros((256,256))
     e = np.zeros((n1,256*256))
     for i in range(n1):
-        e[i] = ev.find_eigenface(matrix_A(database),eigenVec[i])
+        e[i] = ev.find_eigenface(A,eigenVec[i])
     for i in range(n):
-        training = database[i] - mean
-        training = training.reshape((256*256,1))
         for j in range (n1):
-            w[i][j] = np.dot((e[j].reshape((1,256*256))),training)
-    return w
-
-def EFD(database, mean, eigenvec):
-    eigenFaceDatabase = []
-    for i in range(len(database)):
-        eigenFaceDatabase.append(np.matmul(eigenvec, database[i]-mean))
-    return eigenFaceDatabase
-
-def EFT1(testImage, eigenvec, mean, database):
-    testImage = cv2.resize(testImage, (w, h))
-    selisihImage = abs(testImage-mean)
-    eigenFaces = EFD1(database, eigenvec)
-    eigenFaceTest = np.linalg.solve(eigenFaces, selisihImage.resize(w*h))
-    return eigenFaceTest
-
-def EFT(testImage, eigenvec, mean):
-    testImage = cv2.resize(testImage, (w, h))
-    selisihImage = abs(testImage-mean)
-    eigenFaceTest = np.matmul(eigenvec, selisihImage)
-    return eigenFaceTest
+            w[i][j] = np.dot((e[j].reshape((1,256*256))),training[i])
+    return e, w
 
 def EDL(eigenFaceDatabase, eigenFaceTest):
     eDList = []

@@ -61,10 +61,3 @@ def find_eigenface(A, eVec):
     eig = np.dot(A, eVec)
     eig = eig.reshape((256*256))
     return eig
-
-def sort_eigen(cov):
-    eigenVal, eigenVec  = np.linalg.eig(cov)
-    idx = eigenVal.argsort()[::-1]
-    eigenVal = eigenVal[idx]
-    eigenVec = eigenVec[:,idx]
-    return eigenVec

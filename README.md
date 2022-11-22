@@ -1,19 +1,16 @@
 # Face Recognition Using Eigenface
-> Outline a brief description of your project.
-> Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
+>Tugas ini merupakan salah satu tugas besar matakuliah IF2123 Aljabar Linier dan Geometri yang berfokus pada pengaplikasian PCA (Principal Component Analysis) untuk mencari Eigenface yang kemudian akan digunakan untuk menentukan kemiripan suatu gambar (dalam kasus ini kemiripan muka, face recognition).
 
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
+* [Dependencies](#dependencies)
 * [Features](#features)
 * [Screenshots](#screenshots)
 * [Setup](#setup)
 * [Usage](#usage)
 * [Project Status](#project-status)
 * [Room for Improvement](#room-for-improvement)
-* [Acknowledgements](#acknowledgements)
-* [Contact](#contact)
-<!-- * [License](#license) -->
 
 
 ## General Information
@@ -21,9 +18,7 @@
 
 
 ## Technologies Used
-- Tech 1 - version 1.0
-- Tech 2 - version 2.0
-- Tech 3 - version 3.0
+- Python - version 3.10.6
 
 
 ## Dependencies
@@ -31,21 +26,19 @@
 - NumPy   - pip install numpy
 - OpenCV  - pip install opencv-python
 
+
 ## Features
-List the ready features here:
-- Awesome feature 1
-- Awesome feature 2
-- Awesome feature 3
+- Pencarian wajah tercocok berdasarkan gambar uji
+- Pengambilan wajah melalui webcam dan pencarian gambar tercocok (Bonus)
 
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
+![Landing Page](./doc/meme/ReadMe1.png)
 
 
 ## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
-Proceed to describe how to install / setup one's local environment / get started with the project.
+- Jika belum mempunyai Python versi 3.10.6 lakukan penginstallan terlebih dahulu.
+- Lakukan instalasi dependencies (Tkinter, NumPy, dan OpenCV).
 
 
 ## Usage
@@ -60,19 +53,4 @@ Project is: _complete_
 
 
 ## Room for Improvement
-Include areas you believe need improvement / could be improved. Also add TODOs for future development.
-
-Room for improvement:
-- Improvement to be done 1
-- Improvement to be done 2
-
-To do:
-- Feature to be added 1
-- Feature to be added 2
-
-
-## Acknowledgements
-Give credit here.
-- This project was inspired by...
-- This project was based on [this tutorial](https://www.example.com).
-- Many thanks to...
+- Menurunkan waktu pemrosesan pencocokan wajah dengan optimisasi algoritma QR untuk mencari vektor eigen.
