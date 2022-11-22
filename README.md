@@ -33,7 +33,7 @@
 
 
 ## Screenshots
-![Landing Page](./docs/meme/ReadMe1.png)
+![Landing Page](./doc/meme/ReadMe1.png)
 
 
 ## Setup
