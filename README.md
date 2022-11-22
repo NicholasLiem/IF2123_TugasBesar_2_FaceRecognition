@@ -34,7 +34,12 @@
 
 ## Screenshots
 ![Landing Page](./doc/assets/ReadMe1.png)
-
+![TC1](./doc/assets/TC1.png)
+![ResTC1](./doc/assets/ResTC1.png)
+![TC3](./doc/assets/TC3.png)
+![ResTC3](./doc/assets/ResTC3.png)
+![TC5](./doc/assets/TC5.png)
+![ResTC5](./doc/assets/ResTC5a.png)
 
 ## Setup
 - Jika belum mempunyai Python versi 3.10.6 lakukan penginstallan terlebih dahulu.
