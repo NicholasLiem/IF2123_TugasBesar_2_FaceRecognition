@@ -33,7 +33,7 @@
 
 
 ## Screenshots
-![Landing Page](./doc/meme/ReadMe1.png)
+![Landing Page](./doc/assets/ReadMe1.png)
 
 
 ## Setup
@@ -45,11 +45,11 @@
 - Pastikan anda berada pada directory file Algeo02_21079. 
 - Untuk menjalankan main program, jalankan kode di bawah ini.
 
-```python src/main_gui.py```
+`python src/main_gui.py`
 
 - Untuk menjalankan bonus program (via webcam), jalankan kode di bawah ini.
 
-```python src/bonus_gui.py```
+`python src/bonus_gui.py`
 
 
 ## Project Status
