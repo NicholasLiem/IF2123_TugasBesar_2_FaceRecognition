@@ -39,7 +39,7 @@
 ![TC3](./doc/assets/TC3.png)
 ![ResTC3](./doc/assets/ResTC3.png)
 ![TC5](./doc/assets/TC5.png)
-![ResTC5](./doc/assets/ResTC5a.png)
+![ResTC5](./doc/assets/ResTC5.png)
 
 ## Setup
 - Jika belum mempunyai Python versi 3.10.6 lakukan penginstallan terlebih dahulu.
