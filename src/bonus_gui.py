@@ -45,7 +45,7 @@ class WelcomePage(tk.Frame):
         btn = tk.Button(self, text=  "To Face Recognition Page", font = ("Helvetica",14), command=lambda: controller.up_frame("LobbyPage"))
         btn.grid(row=1,column=0, pady=10)
 
-        img = ImageTk.PhotoImage(Image.open("doc/meme/idk.jpg").resize((356,356)))
+        img = ImageTk.PhotoImage(Image.open("doc/assets/idk.jpg").resize((356,356)))
         label = tk.Label(self, image = img)
         label.image = img
         label.grid(row=3,column=0)
