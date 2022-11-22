@@ -33,7 +33,7 @@
 
 
 ## Screenshots
-![Example screenshot](./docs/meme/screenshot.png)
+![Landing Page](./docs/meme/ReadMe1.png)
 
 
 ## Setup
