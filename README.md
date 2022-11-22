@@ -29,7 +29,6 @@
 
 ## Features
 - Pencarian wajah tercocok berdasarkan gambar uji
-- Pengambilan wajah melalui webcam dan pencarian gambar tercocok (Bonus)
 
 
 ## Screenshots
@@ -63,3 +62,4 @@ Project is: _complete_
 
 ## Room for Improvement
 - Menurunkan waktu pemrosesan pencocokan wajah dengan optimisasi algoritma QR untuk mencari vektor eigen.
+- Membuat aplikasi yang bisa membuka webcam dan detect wajah dari situ.
