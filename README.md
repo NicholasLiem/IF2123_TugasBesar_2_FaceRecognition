@@ -4,6 +4,7 @@
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
+* [Dependencies](#dependencies)
 * [Features](#features)
 * [Screenshots](#screenshots)
 * [Setup](#setup)
@@ -32,12 +33,12 @@
 
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
+![Landing Page](./doc/meme/ReadMe1.png)
 
 
 ## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
-Proceed to describe how to install / setup one's local environment / get started with the project.
+- Jika belum mempunyai Python versi 3.10.6 lakukan penginstallan terlebih dahulu.
+- Lakukan instalasi dependencies (Tkinter, NumPy, dan OpenCV).
 
 
 ## Usage
