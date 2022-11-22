@@ -33,7 +33,6 @@
 
 
 ## Screenshots
-![Landing Page](./doc/assets/ReadMe1.png)
 ![TC1](./doc/assets/TC1.png)
 ![ResTC1](./doc/assets/ResTC1.png)
 ![TC3](./doc/assets/TC3.png)
