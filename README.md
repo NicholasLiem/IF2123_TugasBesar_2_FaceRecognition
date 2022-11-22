@@ -47,14 +47,14 @@
 
 
 ## Usage
+- Pertama-tama clone terlebih dahulu repository ke dalam PC anda.
+
+`gh repo clone NicholasLiem/Algeo02_21079`
+
 - Pastikan anda berada pada directory file Algeo02_21079. 
 - Untuk menjalankan main program, jalankan kode di bawah ini.
 
 `python src/main_gui.py`
-
-- Untuk menjalankan bonus program (via webcam), jalankan kode di bawah ini.
-
-`python src/bonus_gui.py`
 
 
 ## Project Status
