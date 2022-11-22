@@ -23,6 +23,7 @@
 
 ## Dependencies
 - Tkinter - pip install tk
+- CustomTkinter - pip install customtkinter
 - NumPy   - pip install numpy
 - OpenCV  - pip install opencv-python
 
@@ -53,7 +54,7 @@
 - Pastikan anda berada pada directory file Algeo02_21079. 
 - Untuk menjalankan main program, jalankan kode di bawah ini.
 
-`python src/main_gui.py`
+`python src/colored_gui.py`
 
 
 ## Project Status
