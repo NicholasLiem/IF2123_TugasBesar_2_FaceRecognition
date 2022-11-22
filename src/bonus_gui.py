@@ -1,107 +1,65 @@
-# import modul-modul yang diperlukan main program + gui
+import customtkinter
 import tkinter as tk
-import os
-from PIL import ImageTk, Image
-from tkinter import filedialog
+from PIL import Image, ImageTk
+import os 
 import main as main
 import imgparsing as imp
-import matplotlib.pyplot as plt
 import timehandling as t
+from tkinter import filedialog
 
-# MainFrame Class
-class MainFrame(tk.Tk):
-    def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
-        self.titlefont = ("Helvetica", 18, "bold")
-        self.title("Face Recognition by Eigenface")
-        self.geometry("1000x600")
+class App(customtkinter.CTk):
+    def __init__(self):
+        super().__init__()
 
-        container = tk.Frame()
-        container.grid(row=0, column=0, sticky="nesw")
+        # set background color to dark gray
+        App.configure(self,fg_color="#383838")
+        self.geometry("1100x650")
+        self.title("Face Recognition By Eigenface")
 
-        self.listing = {}
+        # top frame
+        frame = customtkinter.CTkFrame(master=self,
+                               width=1050,
+                               height=125,
+                               corner_radius=10,
+                               fg_color = "#3C4048",
+                               border_color="white",
+                               border_width=1)
+        frame.pack(padx=10, pady=10)
 
-        for p in (WelcomePage, LobbyPage):
-            page_name = p.__name__
-            frame = p(parent=container, controller=self)
-            frame.grid(row=0, column=0, sticky="nsew")
-            self.listing[page_name] = frame
+        text_var = tk.StringVar(value="FACE RECOGNITION")
+        label = customtkinter.CTkLabel(master=frame,
+                                    textvariable=text_var,
+                                    text_font=("Helvetica",33),
+                                    corner_radius=8)
+        label.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-        self.up_frame('WelcomePage')
+        # frame for displaying test image and closest result image
+        frameImage = customtkinter.CTkFrame(master=self,corner_radius=10,fg_color="#383838")
+        frameImage.pack(pady=0,padx=50,side="right")
 
-    def up_frame(self, page_name):
-        page = self.listing[page_name]
-        page.tkraise()
-    
-# Welcome page class
-class WelcomePage(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        
-        l1 = tk.Label(self,text="WELCOME TO OUR APP",font=("Helvetica",20,"bold"),fg="black")
-        l1.grid(row=0,column=0,padx=340,pady=20)
+        # frame for displaying statistic result
+        frameHasil = customtkinter.CTkFrame(master=self,corner_radius=10,width=450,fg_color="#3C4048",border_width=1,border_color="white")
+        frameHasil.pack(pady=0,padx=50,side="left")
 
-        btn = tk.Button(self, text=  "To Face Recognition Page", font = ("Helvetica",14), command=lambda: controller.up_frame("LobbyPage"))
-        btn.grid(row=1,column=0, pady=10)
+        label1 = customtkinter.CTkLabel(master=frameHasil, text = "Insert Your Dataset", text_font=("Helvetica",12,"bold"))
+        label1.grid(row=0,column=0,padx=10,pady=10)
 
-        img = ImageTk.PhotoImage(Image.open("doc/assets/idk.jpg").resize((356,356)))
-        label = tk.Label(self, image = img)
-        label.image = img
-        label.grid(row=3,column=0)
-
-# LobbyPage class for main feature, face recognition
-class LobbyPage(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-
-        # frame untuk header (judul program dan garis bawah)
-        frameTop = tk.Frame(self, padx=5,pady=5)
-        frameTop.pack(pady=10,padx=10)
-
-        # menampilkan judul program
-        label = tk.Label(frameTop, text = "Face Recognition", font = ("Helvetica",30))
-        label.pack(pady=10,padx=10)
-
-        # membuat line untuk garis bawah judul program
-        my_canvas = tk.Canvas(frameTop, width=900, height=10)
-        my_canvas.pack()
-        my_canvas.create_line(0,10,900,10,fill="black")
-
-        # frame untuk body program (bagian insert data dan tampilan image)
-        frameBody = tk.Frame(self, padx=5,pady=5)
-        frameBody.pack(pady=0,padx=0)
-
-        # frame dalam frameBody untuk bagian insert data dan tampilan hasil run program
-        frame3 = tk.Frame(frameBody,padx=5,pady=5)
-        frame3.pack(side="left",padx=5)
-
-        # fungsi untuk open folder
         def openfoldername():
             global foldernames
             foldername = filedialog.askdirectory(title = 'Select your Test Folder',initialdir=os.getcwd())
             foldernames = cutstring(foldername)
-            labelFolder.config(text=foldernames)
+            labelFolder.configure(text=foldernames)
             return foldernames
         
-        # menampilkan tulisan "Insert Your Dataset" pada frame3
-        label1 = tk.Label(frame3, text = "Insert Your Dataset", font=("Helvetica",15))
-        label1.grid(row=0,column=0,padx=10,pady=10)
-
-        # button untuk memilih folder dataset
-        btn1 = tk.Button(frame3, text="Choose Folder", font=("Helvetica",12), command = openfoldername)
+        btn1 = customtkinter.CTkButton(master=frameHasil, width=100,height=32,border_width=1, text="Choose Folder",command=openfoldername)
         btn1.grid(row=1,column=0,padx=10)
 
-        # menampilkan nama folder yang dipilih
-        labelFolder = tk.Label(frame3, text="No Folder Choosen", font=("Helvetica",10), bg="#D3D3D3")
+        labelFolder = customtkinter.CTkLabel(master=frameHasil, text="No Folder Choosen")
         labelFolder.grid(row=1,column=1)
         
-        # menampilkan tulisan "Insert Your Image" pada frame3
-        label2 = tk.Label(frame3, text="Insert Your Image", font=("Helvetica",15))
+        label2 = customtkinter.CTkLabel(master=frameHasil, text="Insert Your Image", text_font = ("Helvetica",12,"bold"))
         label2.grid(row=2,column=0,padx=10,pady=10)
 
-        # fungsi untuk mendapatkan nama image beserta extensionnya (.jpg) dari path image tsb
         def cutstring(s):
             simpan = ""
             reverse = ""
@@ -123,7 +81,7 @@ class LobbyPage(tk.Frame):
         
             # menampilkan image yang dibuka oleh user ke frame4
             img = ImageTk.PhotoImage(img)
-            my_image = tk.Label(frame4, image=img)
+            my_image = tk.Label(frameTest, image=img)
             my_image.image = img
             my_image.grid(column=0,row=1)
 
@@ -131,7 +89,7 @@ class LobbyPage(tk.Frame):
             imagename = cutstring(x)
 
             # menampilkan nama image yang diplih user
-            labelImage.config(text=imagename)
+            labelImage.configure(text=imagename)
         
         # fungsi pendukung untuk membuka mengambil path dari file image
         def openfilename():
@@ -162,7 +120,7 @@ class LobbyPage(tk.Frame):
             time = hour + "." + min + "." + sec
 
             # menampilkan execution time program
-            labelTimeRes.config(text=time)
+            label6.configure(text=time)
 
             # mengambil path image result yang cocok untuk kembali ditampilkan dalam gui
             path = os.getcwd() + "\\test\\database\\" + foldernames + "\\" + datalabel[idx]
@@ -171,12 +129,12 @@ class LobbyPage(tk.Frame):
             resultImg = Image.open(path)
             resultImg = resultImg.resize((256,256))
             resultImg = ImageTk.PhotoImage(resultImg)
-            res_img = tk.Label(frame5,image=resultImg)
+            res_img = tk.Label(frameHasilTest,image=resultImg)
             res_img.image = resultImg
             res_img.grid(column=0,row=1)
 
             # menampilkan nama image yang cocok dari hasil face recognition
-            labelResult.config(text=datalabel[idx])
+            label4.configure(text=datalabel[idx])
 
             # memproses percent_match dan menampilkannya
             w = hasil[1]
@@ -185,76 +143,62 @@ class LobbyPage(tk.Frame):
             persen = main.percent_match(w,nilai[idx],k)
             persen = round(persen,2)
             persen_text = str(persen) + "%"
-            labelPersenRes.config(text=persen_text)
+            label8.configure(text=persen_text)
 
-        # button untuk memilih image yang ingin dipakai
-        btn2 = tk.Button(frame3, text="Choose Image", font=("Helvetica",12),command=open_img)
-        btn2.grid(row=3,column=0,padx=15)
+        btn2 = customtkinter.CTkButton(master=frameHasil, width=100,height=32,border_width=1, text="Choose Image",command=open_img)
+        btn2.grid(row=3,column=0,padx=10)
 
-        # menampilkan nama image yang dipilih
-        labelImage = tk.Label(frame3, text="No Image Choosen",font=("Helvetica",10), bg="#D3D3D3")
+        labelImage = customtkinter.CTkLabel(master=frameHasil, text="No Image Choosen")
         labelImage.grid(row=3,column=1)
 
-        # menampilkan nama image yang paling mendekati test image
-        label3 = tk.Label(frame3, text="Result :", font=("Helvetica",13))
-        label3.grid(row=4,column=0,pady=10)
-        labelResult = tk.Label(frame3, text="Hasil Test", font=("Helvetica",13), fg="green")
-        labelResult.grid(row=5,column=0)
+        label3 = customtkinter.CTkLabel(master=frameHasil, text="Result :", text_font=("Helvetica",12,"bold"))
+        label3.grid(row=4,column=0,pady=5)
 
-        # menampilkan waktu execution time
-        labelTime = tk.Label(frame3, text ="Execution Time :", font=("Helvetica",13))
-        labelTime.grid(row=6,column=0,pady=10,padx=5)
-        labelTimeRes = tk.Label(frame3, text = "Time Result", font=("Helvetica",13), fg = "green")
-        labelTimeRes.grid(row=7, column=0)
+        label4 = customtkinter.CTkLabel(master=frameHasil, text="Test Result", text_font=("Helvetica",11))
+        label4.grid(row=5,column=0,pady=0)
 
-        # menampilkan percent_match
-        labelPersen = tk.Label(frame3, text = "Percent Matched :",font=("Helvetica",13), pady=10)
-        labelPersen.grid(row=8,column=0)
-        labelPersenRes = tk.Label(frame3, text="???", font=("Helvetica",13), fg="green")
-        labelPersenRes.grid(row=8,column=1)
+        label5 = customtkinter.CTkLabel(master=frameHasil, text="Execution Time :", text_font=("Helvetica",12,"bold"))
+        label5.grid(row=6,column=0,pady=5)
 
-        # frame dalam frameBody untuk bagian menampilkan image test
-        frame4 = tk.Frame(frameBody,padx=5,pady=5)
-        frame4.pack(side="left",padx=5)
+        label6 = customtkinter.CTkLabel(master=frameHasil, text="Time Result", text_font=("Helvetica",12,"bold"))
+        label6.grid(row=7,column=0,pady=5)
 
-        # menampilkan tulisan "Test Image" pada frame4 (di bagian atas image test)
-        label4 = tk.Label(frame4, text="Test Image", font=("Helvetica",15))
-        label4.grid(column=0,row=0)
+        label7 = customtkinter.CTkLabel(master=frameHasil, text="Percent Matched :", text_font=("Helvetica",12,"bold"))
+        label7.grid(row=8,column=0,pady=5)
 
-        # placeholder untuk image test
+        label8 = customtkinter.CTkLabel(master=frameHasil, text="???", text_font=("Helvetica",11,"bold"))
+        label8.grid(row=8,column=1,padx=5)
+
+        # labelDummy = customtkinter.CTkLabel(master=frameHasil, text=" ")
+        # labelDummy.grid(row=0,column=2)
+
+        btnExecute = customtkinter.CTkButton(master=self, text="Proceed Recognition", text_font=("Helvetica",14,"bold"), border_width=1, command=processRecognition)
+        btnExecute.place(relx=0.62, rely=0.9)
+
+        frameTest = customtkinter.CTkFrame(master=frameImage,corner_radius=10,fg_color="white")
+        frameTest.pack(side="left",padx=30)
+
+        frameHasilTest = customtkinter.CTkFrame(master=frameImage,corner_radius=10,fg_color="white")
+        frameHasilTest.pack(side="right")
+
+        labelTestImage = customtkinter.CTkLabel(master=frameTest,text="Test Image", text_font=("Helvetica",12,"bold"), text_color="black")
+        labelTestImage.grid(column=0,row=0,)
+
+        labelHasilTest = customtkinter.CTkLabel(master=frameHasilTest,text="Closest Result", text_font=("Helvetica",12,"bold"), text_color="black")
+        labelHasilTest.grid(column=0,row=0)
+
         placeHolderTest = ImageTk.PhotoImage(Image.open("src/img/img_placeholder.jpg").resize((256,256)))
-        label = tk.Label(frame4, image = placeHolderTest)
+        label = tk.Label(frameTest, image = placeHolderTest)
         label.image = placeHolderTest
         label.grid(row=1,column=0)
 
-        # frame dalam frameBody untuk bagian menampilkan image result
-        frame5 = tk.Frame(frameBody,padx=5,pady=5)
-        frame5.pack(side="left",padx=5)
-        
-        # menampilkan tulisan "Closest Result" pada frame5 (di bagian atas image result)
-        label5 = tk.Label(frame5, text="Closest Result", font=("Helvetica",15))
-        label5.grid(row=0,column=0)
-
-        # placeholder untuk image result
         placeHolderRes = ImageTk.PhotoImage(Image.open("src/img/img_placeholder.jpg").resize((256,256)))
-        labelRes = tk.Label(frame5, image = placeHolderRes)
-        labelRes.image = placeHolderRes
-        labelRes.grid(row=1,column=0)
-
-        # frame untuk bagian bottom
-        frameBottom = tk.Frame(self,padx=5, pady=5)
-        frameBottom.pack(padx=10,pady=10)
-
-        # button untuk berpindah ke welcome page
-        btnWelcome = tk.Button(frameBottom, text="Back To Welcome", font=("Helvetica",12), command=lambda: controller.up_frame("WelcomePage"))
-        btnWelcome.pack(side="left",padx=80)
-
-        # button untuk mengeksekusi proses face recognition
-        btnExecute = tk.Button(frameBottom, text="Proceed Recognition",font=("Helvetica",15,"bold"),command=processRecognition)
-        btnExecute.pack(side="left",padx=210)
+        label = tk.Label(frameHasilTest, image = placeHolderRes)
+        label.image = placeHolderRes
+        label.grid(row=1,column=0)
 
 
 if __name__ == '__main__':
-    app = MainFrame()
+    app = App()
     app.resizable(False, False)
     app.mainloop()
